@@ -81,33 +81,37 @@
         // Ajouter le modèle à la scène
         viewer.scene.primitives.add(tileset);
         
-        // Zoomer automatiquement sur le modèle une fois chargé
-        tileset.readyPromise.then(() => {
-            const boundingSphere = tileset.boundingSphere;
-            const cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
+        // Définir la position géographique
+        const latitude = 43.48106623759074 ; // 
+        const longitude = 5.590556956089597 ; // 
+        const altitude = 253; // 
 
-            // Extraire les données de latitude, longitude et altitude
-            const latitude = Cesium.Math.toDegrees(cartographic.latitude);
-            const longitude = Cesium.Math.toDegrees(cartographic.longitude);
-            const altitude = cartographic.height;
-
-            // Afficher les coordonnées dans la console
-            console.log("Latitude :", latitude);
-            console.log("Longitude :", longitude);
-            console.log("Altitude :", altitude);
-        });
-
-        // Fonction pour centrer la vue sur le modèle
+        // Transformation pour positionner le modèle
+        tileset.readyPromise.then(function() {
+            const position = Cesium.Cartesian3.fromDegrees(longitude, latitude, altitude);
+            const matrix = Cesium.Transforms.eastNorthUpToFixedFrame(position);
+            tileset.root.transform = matrix;
+        
+        // Centrer la caméra sur le modèle au démarrage
+        viewer.zoomTo(tileset);
+        });   
+        
+        // Fonction pour centrer la vue sur le modèle lorsque le bouton est cliqué
         function CentrerlaVue() {
-            if (tileset.ready) {
-                viewer.zoomTo(tileset).then(() => {
-                    console.log("Vue centrée sur le modèle via le bouton.");
-                }).catch((error) => {
-                    console.error("Erreur lors du centrage :", error);
-                });
-            } else {
-                console.error("Le modèle n'est pas encore prêt.");
-            }
+            console.log("Bouton cliqué : recentrage en cours"); // Vérifier si la fonction est appelée
+            viewer.camera.flyTo({
+                destination: Cesium.Cartesian3.fromDegrees(longitude, latitude, altitude + 300), // Ajustez l'altitude pour un meilleur angle de vue
+                orientation: {
+                    heading: Cesium.Math.toRadians(45),
+                    pitch: Cesium.Math.toRadians(-45),
+                    roll: 0.0
+                },
+                duration: 2 // Temps de transition en secondes
+            }).then(() => {
+                console.log("Caméra recentrée avec succès");
+            }).otherwise((error) => {
+                console.error("Erreur lors du recentrage de la caméra:", error);
+            });
         }
     </script>
 </body>

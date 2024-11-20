@@ -2,157 +2,142 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cesium Viewer - Rousset</title>
+    <title>Cesium 3D Tiles Viewer</title>
     <script src="https://cesium.com/downloads/cesiumjs/releases/1.87.1/Build/Cesium/Cesium.js"></script>
     <link href="https://cesium.com/downloads/cesiumjs/releases/1.87.1/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
     <style>
-        /* Global styles */
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-        }
-
-        /* Title styling */
         #title {
             position: absolute;
-            top: 20px;
+            top: 10px;
             left: 50%;
             transform: translateX(-50%);
-            padding: 10px 20px;
-            background: rgba(0, 0, 0, 0.7);
-            color: #ffffff;
-            font-size: 24px;
+            color: #FFFFFF;
+            background: rgba(42, 42, 42, 0.8);
+            font-size: 30px;
             font-weight: bold;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
             z-index: 10;
         }
-
-        /* Logo styling */
+        
         #logo {
             position: absolute;
+            background: rgba(42, 42, 42, 0.8);
             top: 20px;
-            left: 20px;
-            width: 150px;
-            z-index: 10;
+            left: 40px;
+            width: 220px; /* Ajustez la taille du logo */
+            z-index: 10; /* Pour qu'il soit au-dessus de la carte */
         }
 
-        /* Cesium container */
+        
         #cesiumContainer {
             width: 100%;
             height: 100vh;
         }
 
-        /* Toolbar styling */
         #toolbar {
             position: absolute;
-            top: 100px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            top: 200px;
+            left: 40px;
             z-index: 10;
-        }
-
-        /* Button styling */
-        #toolbar button, #toggleButton {
-            display: block;
-            margin: 10px 0;
-            padding: 10px 15px;
-            font-size: 14px;
-            color: #ffffff;
-            background: #007bff;
-            border: none;
+            background: rgba(42, 42, 42, 0.8);
+            padding: 10px;
+            color: white;
             border-radius: 5px;
+        }
+        #toolbar button {
+            color: white;
+            background-color: #333;
+            border: none;
+            padding: 5px 10px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            border-radius: 3px;
+            margin: 5px;
         }
-
-        #toolbar button:hover, #toggleButton:hover {
-            background-color: #0056b3;
+        #toolbar button:hover {
+            background-color: #555;
         }
-
-        /* Toggle button styling */
         #toggleButton {
             position: absolute;
-            top: 200px;
-            left: 20px;
+            top: 300px;
+            left: 40px;
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
             z-index: 10;
+        }
+
+        #toggleButton:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <!-- Title -->
-    <h1 id="title">Photomaillage Drone - Rousset</h1>
-
-    <!-- Logo -->
-    <img id="logo" src="https://www.opsia.fr/assets/images/opsia-logo.png" alt="Logo Opsia">
-
-    <!-- Cesium Container -->
-    <div id="cesiumContainer"></div>
-
-    <!-- Toolbar -->
-    <div id="toolbar">
-        <button onclick="centerView()">Centrer la Vue</button>
-    </div>
-
-    <!-- Toggle Button -->
+    <h1 id="title">Rousset</h1>
     <button id="toggleButton" onclick="toggleModel()">Afficher/Masquer le modèle</button>
-
+    <img id="logo" src="https://www.opsia.fr/assets/images/opsia-logo.png" alt="Logo">
+    <div id="cesiumContainer" style="width: 100%; height: 100vh;"></div>
+    <div id="toolbar">
+        <button onclick="CentrerlaVue()">Centrer la Vue</button>  
     <script>
-        // Cesium token
-        Cesium.Ion.defaultAccessToken = 'votre_token_cesium_ici';
+        // Ajoutez le token Cesium Ion ici
+        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjNWNkYTYzYS1hODNhLTQwZjEtYjdmMi0yNTY0NGFkYjJlMGMiLCJpZCI6MjQ4NDU4LCJpYXQiOjE3MjkwNjIwMDZ9.gan_GuBjIjADDeC_ttcN1OZSnfePlAtb1tE23vcDzbU';
 
-        // Initialize Cesium viewer
-        const viewer = new Cesium.Viewer("cesiumContainer", {
-            terrainProvider: Cesium.createWorldTerrain(),
+        // Initialiser le viewer avec le fond de carte et le terrain
+        var viewer = new Cesium.Viewer("cesiumContainer", {
+           terrainProvider: Cesium.createWorldTerrain(),
         });
 
-        // Load 3D Tiles
+
+        // Charger le modèle 3DTiles
         const tileset = new Cesium.Cesium3DTileset({
-            url: 'https://pleblond1.github.io/Rousset/Data/tileset.json',
+            url: 'https://pleblond1.github.io/Rousset/Data/tileset.json'
         });
 
-        // Add tileset to the scene
+        // Ajouter le modèle à la scène
         viewer.scene.primitives.add(tileset);
+        
+        // Définir la position géographique
+        const latitude = 43.466265; // 
+        const longitude = 5.570252; // 
+        const altitude = -995; // 
 
-        // Georeferencing
-        const latitude = 43.466265;
-        const longitude = 5.570252;
-        const altitude = -995;
-
-        tileset.readyPromise.then(() => {
+        // Transformation pour positionner le modèle
+        tileset.readyPromise.then(function() {
             const position = Cesium.Cartesian3.fromDegrees(longitude, latitude, altitude);
             const matrix = Cesium.Transforms.eastNorthUpToFixedFrame(position);
             tileset.root.transform = matrix;
-
-            // Center the camera on the model at start
-            viewer.zoomTo(tileset);
-        });
-
-        // Center the view function
-        function centerView() {
+        
+        // Centrer la caméra sur le modèle au démarrage
+        viewer.zoomTo(tileset);
+        });   
+        
+        // Fonction pour centrer la vue sur le modèle lorsque le bouton est cliqué
+        function CentrerlaVue() {
+            console.log("Bouton cliqué : recentrage en cours"); // Vérifier si la fonction est appelée
             viewer.camera.flyTo({
-                destination: Cesium.Cartesian3.fromDegrees(longitude, latitude, altitude + 2500),
+                destination: Cesium.Cartesian3.fromDegrees(longitude, latitude, altitude + 2500), // Ajustez l'altitude pour un meilleur angle de vue
                 orientation: {
-                    heading: Cesium.Math.toRadians(0),
-                    pitch: Cesium.Math.toRadians(-35),
-                    roll: 0.0,
+                    heading: Cesium.Math.toRadians(45),
+                    pitch: Cesium.Math.toRadians(-40),
+                    roll: 0.0
                 },
-                duration: 2,
+                duration: 2 // Temps de transition en secondes
+            }).then(() => {
+                console.log("Caméra recentrée avec succès");
+            }).otherwise((error) => {
+                console.error("Erreur lors du recentrage de la caméra:", error);
             });
         }
-
-        // Toggle model visibility
+        
+        // Fonction pour afficher/masquer le modèle
         function toggleModel() {
             if (tileset.ready) {
-                tileset.show = !tileset.show;
+                tileset.show = !tileset.show; // Basculer la propriété "show"
+                console.log("Modèle visible :", tileset.show);
+            } else {
+                console.error("Le modèle n'est pas encore prêt.");
             }
         }
     </script>

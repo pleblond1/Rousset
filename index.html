@@ -83,6 +83,21 @@
         
         // Zoomer automatiquement sur le modèle une fois chargé
         tileset.readyPromise.then(() => {
+            const boundingSphere = tileset.boundingSphere;
+            const cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
+
+            cratographic.height+=50
+
+            const updatedPosition = Cesium.Cartesian3.fromRadians(
+                cartographic.longitude,
+                cartographic.latitude,
+                cartographic.height
+            );
+
+            // Appliquer la transformation
+            const transform = Cesium.Transforms.eastNorthUpToFixedFrame(updatedPosition);
+            tileset.root.transform = transform;
+            
             viewer.zoomTo(tileset).then(() => {
                 console.log("Modèle centré avec une altitude ajustée.");
             });

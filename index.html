@@ -86,17 +86,16 @@
             const boundingSphere = tileset.boundingSphere;
             const cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
 
-            cartographic.height-=1400
+            // Extraire les données de latitude, longitude et altitude
+            const latitude = Cesium.Math.toDegrees(cartographic.latitude);
+            const longitude = Cesium.Math.toDegrees(cartographic.longitude);
+            const altitude = cartographic.height;
 
-            const updatedPosition = Cesium.Cartesian3.fromRadians(
-                cartographic.longitude,
-                cartographic.latitude,
-                cartographic.height
-            );
-
-            // Appliquer la transformation
-            const transform = Cesium.Transforms.eastNorthUpToFixedFrame(updatedPosition);
-            tileset.root.transform = transform;
+            // Afficher les coordonnées dans la console
+            console.log("Latitude :", latitude);
+            console.log("Longitude :", longitude);
+            console.log("Altitude :", altitude);
+        });
             
             viewer.zoomTo(tileset).then(() => {
                 console.log("Modèle centré avec une altitude ajustée.");

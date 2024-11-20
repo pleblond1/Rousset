@@ -81,20 +81,14 @@
         // Ajouter le modèle à la scène
         viewer.scene.primitives.add(tileset);
         
-        // Définir la position géographique
-        const latitude = 43.120972; // 
-        const longitude = 5.93235; // 
-        const altitude = 61; // 
-
-        // Transformation pour positionner le modèle
-        tileset.readyPromise.then(function() {
-            const position = Cesium.Cartesian3.fromDegrees(longitude, latitude, altitude);
-            const matrix = Cesium.Transforms.eastNorthUpToFixedFrame(position);
-            tileset.root.transform = matrix;
-        
-        // Centrer la caméra sur le modèle au démarrage
-        viewer.zoomTo(tileset);
-        });   
+        // Zoomer automatiquement sur le modèle une fois chargé
+        tileset.readyPromise.then(() => {
+            viewer.zoomTo(tileset).then(() => {
+                console.log("Modèle centré automatiquement");
+        });
+        }).otherwise((error) => {
+            console.error("Erreur lors du chargement du modèle :", error);
+        });
         
         // Fonction pour centrer la vue sur le modèle lorsque le bouton est cliqué
         function CentrerlaVue() {

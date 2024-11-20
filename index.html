@@ -83,25 +83,42 @@
         
         // Zoomer automatiquement sur le modèle une fois chargé
         tileset.readyPromise.then(() => {
+            const boundingSphere = tileset.boundingSphere;
+            const cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
+
+            // Ajouter 49 mètres d'altitude
+            cartographic.height += 49;
+
+            // Calculer la nouvelle position en coordonnées cartésiennes
+            const updatedPosition = Cesium.Cartesian3.fromRadians(
+                cartographic.longitude,
+                cartographic.latitude,
+                cartographic.height
+            );
+
+            // Appliquer la transformation
+            const transform = Cesium.Transforms.eastNorthUpToFixedFrame(updatedPosition);
+            tileset.root.transform = transform;
+
+            // Centrer la vue sur le modèle
             viewer.zoomTo(tileset).then(() => {
-                console.log("Modèle centré automatiquement");
-        });
+                console.log("Modèle centré avec une altitude ajustée.");
+            });
         }).otherwise((error) => {
             console.error("Erreur lors du chargement du modèle :", error);
         });
-        
-        // Fonction pour centrer la vue sur le modèle lorsque le bouton est cliqué
-        function CentrerlaVue() {
-            console.log("Bouton cliqué : recentrage en cours"); // Vérifier si la fonction est appelée
+
+        // Fonction pour centrer la vue sur le modèle
+        function centerView() {
             if (tileset.ready) {
                 viewer.zoomTo(tileset).then(() => {
-            },
-                duration: 2 // Temps de transition en secondes
-            }).then(() => {
-                console.log("Caméra recentrée avec succès");
-            }).otherwise((error) => {
-                console.error("Erreur lors du recentrage de la caméra:", error);
-            });
+                    console.log("Vue centrée sur le modèle via le bouton.");
+                }).catch((error) => {
+                    console.error("Erreur lors du centrage :", error);
+                });
+            } else {
+                console.error("Le modèle n'est pas encore prêt.");
+            }
         }
     </script>
 </body>

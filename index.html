@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cesium 3D Tiles</title>
+    <title>Cesium 3D Tiles Viewer</title>
     <script src="https://cesium.com/downloads/cesiumjs/releases/1.87.1/Build/Cesium/Cesium.js"></script>
     <link href="https://cesium.com/downloads/cesiumjs/releases/1.87.1/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
     <style>
@@ -58,7 +58,7 @@
     </style>
 </head>
 <body>
-    <h1 id="title">Photomaillage hallessss</h1>
+    <h1 id="title">Photomaillage drone Vitrolles</h1>
     <img id="logo" src="https://www.opsia.fr/assets/images/opsia-logo.png" alt="Logo">
     <div id="cesiumContainer" style="width: 100%; height: 100vh;"></div>
     <div id="toolbar">
@@ -82,8 +82,8 @@
         viewer.scene.primitives.add(tileset);
         
         // Définir la position géographique
-        const latitude = 43,4662650356 ; // 
-        const longitude = 5,5702521002 ; // 
+        const latitude = 43,466265; // 
+        const longitude = 5,570252; // 
         const altitude = -1011; // 
 
         // Transformation pour positionner le modèle

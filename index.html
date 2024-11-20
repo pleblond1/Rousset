@@ -96,13 +96,6 @@
             console.log("Longitude :", longitude);
             console.log("Altitude :", altitude);
         });
-            
-            viewer.zoomTo(tileset).then(() => {
-                console.log("Modèle centré avec une altitude ajustée.");
-            });
-        }).otherwise((error) => {
-            console.error("Erreur lors du chargement du modèle :", error);
-        });
 
         // Fonction pour centrer la vue sur le modèle
         function CentrerlaVue() {

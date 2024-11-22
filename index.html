@@ -103,6 +103,8 @@
         }));
         // Initialiser le viewer avec le fond de carte et le terrain
         var viewer = new Cesium.Viewer("cesiumContainer", {
+           imageryProviderViewModels: imageryViewModels,
+           selectedImageryProviderViewModel: imageryViewModels[1],
            animation: false,
            navigationHelpButton: false,
            sceneModePicker: false,

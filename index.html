@@ -86,6 +86,14 @@
 
         // Initialiser le viewer avec le fond de carte et le terrain
         var viewer = new Cesium.Viewer("cesiumContainer", {
+           animation: false,
+           baseLayerPicker: false,
+           navigationHelpButton: false,
+           sceneModePicker: false,
+           homeButton: false,
+           geocoder: false,
+           fullscreenButton: false,
+           timeline: false,
            terrainProvider: Cesium.createWorldTerrain(),
         });
 

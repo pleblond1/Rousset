@@ -83,7 +83,24 @@
     <script>
         // Ajoutez le token Cesium Ion ici
         Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjNWNkYTYzYS1hODNhLTQwZjEtYjdmMi0yNTY0NGFkYjJlMGMiLCJpZCI6MjQ4NDU4LCJpYXQiOjE3MjkwNjIwMDZ9.gan_GuBjIjADDeC_ttcN1OZSnfePlAtb1tE23vcDzbU';
+        
+        let CartoAttribution = 'Map tiles by <a href="https://carto.com">Carto</a>, under CC BY 3.0. Data by <a href="https://www.openstreetmap.org/">OpenStreetMap</a>, under ODbL.'
 
+        var imageryViewModels = [];
+        
+        imageryViewModels.push(new Cesium.ProviderViewModel({
+          name: 'Dark Matter without labels',
+          tooltip: 'CartoDB Dark Matter without labels basemap',
+          iconUrl: 'http://a.basemaps.cartocdn.com/rastertiles/dark_nolabels/5/15/12.png',
+          creationFunction: function() {
+            return new Cesium.UrlTemplateImageryProvider({
+              url: 'https://{s}.basemaps.cartocdn.com/rastertiles/dark_nolabels/{z}/{x}/{y}.png',
+              credit: CartoAttribution,
+              minimumLevel: 0,
+              maximumLevel: 18
+            });
+          }
+        }));
         // Initialiser le viewer avec le fond de carte et le terrain
         var viewer = new Cesium.Viewer("cesiumContainer", {
            animation: false,
@@ -92,9 +109,9 @@
            homeButton: false,
            geocoder: false,
            timeline: false,
-           terrainProvider: Cesium.createWorldTerrain(),
         });
-
+        
+        viewer.baseLayerPicker.viewModel.terrainProviderViewModels.removeAll()
 
         // Charger le modèle 3DTiles
         const tileset = new Cesium.Cesium3DTileset({

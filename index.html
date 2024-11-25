@@ -130,11 +130,6 @@
             console.log("Bounding Sphere Center:", tileset.boundingSphere.center);
             console.log("Height above ellipsoid:", tileset.boundingSphere.center.z);
         });
-
-        const cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center);
-        console.log("Longitude (radians):", cartographic.longitude);
-        console.log("Latitude (radians):", cartographic.latitude);
-        console.log("Height (meters):", cartographic.height);
         
         // Centrer la caméra sur le modèle au démarrage
         viewer.zoomTo(tileset);

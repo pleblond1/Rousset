@@ -132,7 +132,7 @@
             const cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
 
         // Ajouter 49 mètres d'altitude
-        cartographic.height += 49;
+        cartographic.height += -995;
 
         // Calculer la nouvelle position en coordonnées cartésiennes
         const updatedPosition = Cesium.Cartesian3.fromRadians(

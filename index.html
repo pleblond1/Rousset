@@ -123,6 +123,9 @@
             url: 'https://pleblond1.github.io/Rousset/Data/tileset.json'
         });
         
+        // Ajouter le modèle à la scène
+        viewer.scene.primitives.add(tileset);
+
         // Appliquer un décalage vertical de 49 m
         tileset.readyPromise.then(() => {
             const boundingCenter = Cesium.Cartesian3.fromElements(
@@ -139,9 +142,6 @@
         }).catch((error) => {
             console.error("Erreur lors de la préparation du tileset :", error);
         });
-        
-        // Ajouter le modèle à la scène
-        viewer.scene.primitives.add(tileset);
         
         // Centrer la caméra sur le modèle au démarrage
         viewer.zoomTo(tileset);

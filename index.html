@@ -134,7 +134,7 @@
                 tileset.boundingSphere.center.z
             );
 
-            const translation = Cesium.Cartesian3.fromElements(0, 0, 49); // Décalage de 49 m
+            const translation = Cesium.Cartesian3.fromElements(0, 0, 0); // Décalage de 49 m
             const modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(boundingCenter);
             Cesium.Matrix4.multiplyByTranslation(modelMatrix, translation, modelMatrix);
 

@@ -163,16 +163,19 @@
             }
         }
 
-        // Fonction pour obtenir les coordonnées en fonction de la position du curseur
+        // Fonction pour obtenir les coordonnées par rapport au modèle 3D
         viewer.screenSpaceEventHandler.setInputAction(function (movement) {
             var ray = viewer.camera.getPickRay(movement.endPosition);
-            var intersection = viewer.scene.globe.pick(ray, viewer.scene);
-            if (Cesium.defined(intersection)) {
-                var cartographic = Cesium.Cartographic.fromCartesian(intersection);
+            var intersection = viewer.scene.pick(ray, viewer.scene);
+            
+            // Si l'intersection est avec le modèle 3D
+            if (Cesium.defined(intersection) && intersection.primitive === tileset) {
+                var position = intersection.endPosition;
+                var cartographic = Cesium.Cartographic.fromCartesian(position);
                 var longitude = Cesium.Math.toDegrees(cartographic.longitude).toFixed(6);
                 var latitude = Cesium.Math.toDegrees(cartographic.latitude).toFixed(6);
                 var height = cartographic.height.toFixed(2);
-                document.getElementById('coordinates').textContent = 'Longitude: ' + longitude + ', Latitude: ' + latitude + ', Altitude: ' + height + 'm';
+                document.getElementById('coordinates').textContent = 'Longitude: ' + longitude + ', Latitude: ' + latitude + ', Height (Model): ' + height + 'm';
             }
         }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
     </script>

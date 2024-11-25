@@ -135,14 +135,17 @@
         // Fonction pour centrer la vue sur le modèle lorsque le bouton est cliqué
         function CentrerlaVue() {
             console.log("Bouton cliqué : recentrage en cours"); // Vérifier si la fonction est appelée
-            viewer.zoomTo(tileset){
+            if (tileset.ready) {
+                viewer.zoomTo(tileset).then(() => {
+                    console.log("Vue centrée sur le modèle via le bouton.");
+                }).catch((error) => {
+                    console.error("Erreur lors du centrage :", error);
+                });
+            } else {
+                console.error("Le modèle n'est pas encore prêt.");
+            }
                 }
                 duration: 2 // Temps de transition en secondes
-            }).then(() => {
-                console.log("Caméra recentrée avec succès");
-            }).otherwise((error) => {
-                console.error("Erreur lors du recentrage de la caméra:", error);
-            });
         }
         
         // Fonction pour afficher/masquer le modèle

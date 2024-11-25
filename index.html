@@ -26,7 +26,6 @@
             z-index: 10; /* Pour qu'il soit au-dessus de la carte */
         }
 
-        
         #cesiumContainer {
             width: 100%;
             height: 100vh;
@@ -67,6 +66,17 @@
         #toggleButton:hover {
             background-color: #0056b3;
         }
+
+        #coordinates {
+            position: absolute;
+            bottom: 900px;
+            left: 1100px;
+            color: white;
+            font-size: 18px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
@@ -76,12 +86,15 @@
     <div id="cesiumContainer" style="width: 100%; height: 100vh;"></div>
     <div id="toolbar">
         <button onclick="CentrerlaVue()">Centrer la Vue</button>  
+    </div>
+    <!-- Élément pour afficher les coordonnées -->
+    <div id="coordinates">Coordonnées: N/A</div>
+
     <script>
         // Ajoutez le token Cesium Ion ici
         Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjNWNkYTYzYS1hODNhLTQwZjEtYjdmMi0yNTY0NGFkYjJlMGMiLCJpZCI6MjQ4NDU4LCJpYXQiOjE3MjkwNjIwMDZ9.gan_GuBjIjADDeC_ttcN1OZSnfePlAtb1tE23vcDzbU';
         
         let CartoAttribution = 'Map tiles by <a href="https://carto.com">Carto</a>, under CC BY 3.0. Data by <a href="https://www.openstreetmap.org/">OpenStreetMap</a>, under ODbL.'
-
         var imageryViewModels = [];
         
         imageryViewModels.push(new Cesium.ProviderViewModel({
@@ -98,8 +111,6 @@
           }
         }));
         
-    
-        
         // Initialiser le viewer avec le fond de carte et le terrain
         var viewer = new Cesium.Viewer("cesiumContainer", {
            imageryProviderViewModels: imageryViewModels,
@@ -110,7 +121,6 @@
            homeButton: false,
            geocoder: false,
            timeline: false,
-           //terrainProvider: Cesium.createWorldTerrain(),
         });
         
         viewer.baseLayerPicker.viewModel.terrainProviderViewModels.removeAll()
@@ -131,7 +141,7 @@
 
         // Fonction pour centrer la vue sur le modèle lorsque le bouton est cliqué
         function CentrerlaVue() {
-            console.log("Bouton cliqué : recentrage en cours"); // Vérifier si la fonction est appelée
+            console.log("Bouton cliqué : recentrage en cours");
             if (tileset.ready) {
                 viewer.zoomTo(tileset).then(() => {
                     console.log("Vue centrée sur le modèle via le bouton.");
@@ -152,6 +162,19 @@
                 console.error("Le modèle n'est pas encore prêt.");
             }
         }
+
+        // Fonction pour obtenir les coordonnées en fonction de la position du curseur
+        viewer.screenSpaceEventHandler.setInputAction(function (movement) {
+            var ray = viewer.camera.getPickRay(movement.endPosition);
+            var intersection = viewer.scene.globe.pick(ray, viewer.scene);
+            if (Cesium.defined(intersection)) {
+                var cartographic = Cesium.Cartographic.fromCartesian(intersection);
+                var longitude = Cesium.Math.toDegrees(cartographic.longitude).toFixed(6);
+                var latitude = Cesium.Math.toDegrees(cartographic.latitude).toFixed(6);
+                var height = cartographic.height.toFixed(2);
+                document.getElementById('coordinates').textContent = 'Longitude: ' + longitude + ', Latitude: ' + latitude + ', Height: ' + height + 'm';
+            }
+        }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
     </script>
 </body>
 </html>

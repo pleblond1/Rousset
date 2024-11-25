@@ -172,7 +172,7 @@
                 var longitude = Cesium.Math.toDegrees(cartographic.longitude).toFixed(6);
                 var latitude = Cesium.Math.toDegrees(cartographic.latitude).toFixed(6);
                 var height = cartographic.height.toFixed(2);
-                document.getElementById('coordinates').textContent = 'Longitude: ' + longitude + ', Latitude: ' + latitude + ', altitude: ' + height + 'm';
+                document.getElementById('coordinates').textContent = 'Longitude: ' + longitude + ', Latitude: ' + latitude + ', Height: ' + height + 'm';
             }
         }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
     </script>

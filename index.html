@@ -115,7 +115,7 @@
 
         // Modifiez l'échantillonnage du terrain pour ajouter un décalage vertical de 50 m
         Cesium.sampleTerrainMostDetailed(viewer.terrainProvider, [cartographic]).then(function (updatedPositions) {
-            updatedPositions[0].height += 50; // Appliquez le décalage de 50 m
+            updatedPositions[0].height -= 50; // Appliquez le décalage de 50 m
             const cartesian = Cesium.Cartesian3.fromRadians(
                 updatedPositions[0].longitude,
                 updatedPositions[0].latitude,

@@ -67,10 +67,11 @@
             background-color: #0056b3;
         }
 
+        /* Pour afficher les coordonnées */
         #coordinates {
             position: absolute;
-            bottom: 900px;
-            left: 1100px;
+            bottom: 10px;
+            left: 10px;
             color: white;
             font-size: 18px;
             z-index: 10;
@@ -166,16 +167,18 @@
         // Fonction pour obtenir les coordonnées par rapport au modèle 3D
         viewer.screenSpaceEventHandler.setInputAction(function (movement) {
             var ray = viewer.camera.getPickRay(movement.endPosition);
-            var intersection = viewer.scene.pick(ray, viewer.scene);
-            
-            // Si l'intersection est avec le modèle 3D
-            if (Cesium.defined(intersection) && intersection.primitive === tileset) {
+            var intersection = viewer.scene.pickFromRay(ray);
+
+            // Vérifier si l'intersection touche le modèle 3D
+            if (intersection && intersection.primitive === tileset) {
                 var position = intersection.endPosition;
                 var cartographic = Cesium.Cartographic.fromCartesian(position);
                 var longitude = Cesium.Math.toDegrees(cartographic.longitude).toFixed(6);
                 var latitude = Cesium.Math.toDegrees(cartographic.latitude).toFixed(6);
                 var height = cartographic.height.toFixed(2);
                 document.getElementById('coordinates').textContent = 'Longitude: ' + longitude + ', Latitude: ' + latitude + ', Height (Model): ' + height + 'm';
+            } else {
+                document.getElementById('coordinates').textContent = 'Coordonnées: N/A'; // Si aucune intersection n'a été trouvée
             }
         }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
     </script>

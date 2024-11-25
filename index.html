@@ -127,10 +127,20 @@
         viewer.scene.primitives.add(tileset);
 
         tileset.readyPromise.then(() => {
-            console.log("Bounding Sphere Center:", tileset.boundingSphere.center);
-            console.log("Height above ellipsoid:", tileset.boundingSphere.center.z);
+            const translation = Cesium.Cartesian3.fromElements(0, 0, 50); // Décalage de 50 m vers le haut
+            const modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(
+                tileset.boundingSphere.center
+            );
+
+        // Appliquer le décalage à la matrice de transformation
+            Cesium.Matrix4.multiplyByTranslation(modelMatrix, translation, modelMatrix);
+
+            tileset.modelMatrix = modelMatrix;
+
+            console.log("Décalage vertical fixe appliqué.");
         });
-        
+
+
         // Centrer la caméra sur le modèle au démarrage
         viewer.zoomTo(tileset);
 

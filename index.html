@@ -110,7 +110,19 @@
            homeButton: false,
            geocoder: false,
            timeline: false,
-           //terrainProvider: Cesium.createWorldTerrain(),
+           terrainProvider: Cesium.createWorldTerrain(),
+        });
+
+        // Modifiez l'échantillonnage du terrain pour ajouter un décalage vertical de 50 m
+        Cesium.sampleTerrainMostDetailed(viewer.terrainProvider, [cartographic]).then(function (updatedPositions) {
+            updatedPositions[0].height += 50; // Appliquez le décalage de 50 m
+            const cartesian = Cesium.Cartesian3.fromRadians(
+                updatedPositions[0].longitude,
+                updatedPositions[0].latitude,
+                updatedPositions[0].height
+            );
+            // Mettez à jour le modèle avec la nouvelle hauteur modifiée du terrain
+            viewer.scene.globe.depthTestAgainstTerrain = true;
         });
         
         viewer.baseLayerPicker.viewModel.terrainProviderViewModels.removeAll()

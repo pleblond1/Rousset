@@ -117,9 +117,11 @@
            terrainProvider: Cesium.createWorldTerrain(),
         });
         
-        viewer.scene.screenSpaceCameraController.minimumZoomDistance = 200.0;
         viewer.baseLayerPicker.viewModel.terrainProviderViewModels.removeAll()
-
+        
+        // Ajuster le zoom maximum
+        viewer.scene.screenSpaceCameraController.minimumZoomDistance = 200.0;
+        
         // Charger le modèle 3DTiles
         const tileset = new Cesium.Cesium3DTileset({
             url: 'https://pleblond1.github.io/Rousset/Data/tileset.json'

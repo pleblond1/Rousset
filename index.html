@@ -122,33 +122,30 @@
         const tileset = new Cesium.Cesium3DTileset({
             url: 'https://pleblond1.github.io/Rousset/Data/tileset.json'
         });
+        
+        // Appliquer un décalage vertical de 49 m
+        tileset.readyPromise.then(() => {
+            const boundingCenter = Cesium.Cartesian3.fromElements(
+                tileset.boundingSphere.center.x,
+                tileset.boundingSphere.center.y,
+                tileset.boundingSphere.center.z
+            );
 
+            const translation = Cesium.Cartesian3.fromElements(0, 0, 49); // Décalage de 49 m
+            const modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(boundingCenter);
+            Cesium.Matrix4.multiplyByTranslation(modelMatrix, translation, modelMatrix);
+
+            tileset.modelMatrix = modelMatrix;
+        }).catch((error) => {
+            console.error("Erreur lors de la préparation du tileset :", error);
+        });
+        
         // Ajouter le modèle à la scène
         viewer.scene.primitives.add(tileset);
-
-        // Ajouter une altitude de 49 mètres
-        tileset.readyPromise.then(() => {
-            const boundingSphere = tileset.boundingSphere;
-            const cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
-
-        // Ajouter 49 mètres d'altitude
-        cartographic.height += -995;
-
-        // Calculer la nouvelle position en coordonnées cartésiennes
-        const updatedPosition = Cesium.Cartesian3.fromRadians(
-            cartographic.longitude,
-            cartographic.latitude,
-            cartographic.height
-        );
-
-        // Appliquer la transformation
-        const transform = Cesium.Transforms.eastNorthUpToFixedFrame(updatedPosition);
-        tileset.root.transform = transform;
-
+        
         // Centrer la caméra sur le modèle au démarrage
         viewer.zoomTo(tileset);
-        });  
-        
+
         // Fonction pour centrer la vue sur le modèle lorsque le bouton est cliqué
         function CentrerlaVue() {
             console.log("Bouton cliqué : recentrage en cours"); // Vérifier si la fonction est appelée

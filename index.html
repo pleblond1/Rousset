@@ -121,9 +121,17 @@
         const tileset = new Cesium.Cesium3DTileset({
             url: 'https://pleblond1.github.io/Rousset/Data/tileset.json'
         });
-        
-        // Ajouter le modèle à la scène
-        viewer.scene.primitives.add(tileset);
+
+        // Ajouter un décalage à l'altitude du modèle pour l'aligner avec l'ellipsoïde
+        tileset.readyPromise.then(function() {
+            viewer.scene.primitives.add(tileset);
+
+            // Appliquer le décalage d'altitude (par exemple 49 mètres)
+            tileset.modelMatrix = Cesium.Matrix4.multiplyByTranslation(
+                tileset.modelMatrix,
+                new Cesium.Cartesian3(0.0, 0.0, 49.0), // Décalage de 49m sur l'axe Z
+                new Cesium.Matrix4()
+            );
 
         // Centrer la caméra sur le modèle au démarrage
         viewer.zoomTo(tileset);

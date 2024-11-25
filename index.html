@@ -125,7 +125,12 @@
         
         // Ajouter le modèle à la scène
         viewer.scene.primitives.add(tileset);
-
+        
+        tileset.readyPromise.then(() => {
+            console.log("Bounding Sphere Center:", tileset.boundingSphere.center);
+            console.log("Height above ellipsoid:", tileset.boundingSphere.center.z);
+        });
+        
         // Appliquer un décalage vertical de 49 m
         tileset.readyPromise.then(() => {
             const boundingCenter = Cesium.Cartesian3.fromElements(
